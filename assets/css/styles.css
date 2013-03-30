@@ -1,0 +1,21 @@
+body {
+    padding-top: 60px;
+}
+
+fieldset {
+  border: 1px solid #e5e5e5;
+  margin: 0 0 15px;
+  padding: 10px 20px;
+}
+
+fieldset > legend {
+  display: inline;
+  padding: 0 10px;
+  margin-bottom: 0px;
+  width: auto;
+  border: none;
+}
+
+a {
+    cursor: pointer;
+}

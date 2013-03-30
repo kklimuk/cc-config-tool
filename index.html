@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Field Making Tool</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css"/>
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+                <a class="brand" href="#">Form Creator</a>
+                <ul class="nav">
+                    <li><a data-bind="attr: { href: file, download: file_name }">Save</a></li>
+                    <li><a href="#" data-bind="click: log_json">Log</a></li>
+                    <li><a href="#" data-bind="click: load">Load</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <input type="text" data-bind="value: file_name" placeholder="Configuration File Name"/>
+        <fieldset data-bind="template: {name: 'group', data: outer}"></fieldset>
+    </div>
+
+
+    <script id="group" type="text/html">
+    <legend>
+        <input type="text" data-bind="value: form_name" placeholder="Group Form Name"/>
+        <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
+        <span class="btn-group" data-bind="template: { name: 'field-options', data: $data}"></span>
+    </legend>
+
+    <div class="fields" data-bind="foreach: fields">
+        <!-- ko if: type === "group" -->
+            <fieldset data-bind="template: {name: 'group', data: $data}"></fieldset>
+        <!-- /ko -->
+        <!-- ko if: type === "multiple" -->
+            <fieldset data-bind="template: {name: 'multiple', data: $data}"></fieldset>
+        <!-- /ko -->
+        <!-- ko if: type === "text" -->
+            <fieldset data-bind="template: {name: 'text', data: $data}"></fieldset>
+        <!-- /ko -->
+        <!-- ko if: type === "checkbox" -->
+            <fieldset data-bind="template: {name: 'checkbox', data: $data}"></fieldset>
+        <!-- /ko -->
+    </div>
+
+    <div class="input-prepend">
+        <div class="btn-group">
+            <div class="btn-group">
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Add Item <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a data-bind="click: add_field.bind($data, 'text')">Text</a></li>
+                    <li><a data-bind="click: add_field.bind($data, 'multiple')">Multiple</a></li>
+                    <li><a data-bind="click: add_field.bind($data, 'checkbox')">Checkbox</a></li>
+                    <li class="divider"></li>
+                    <li><a data-bind="click: add_field.bind($data, 'group')">Group</a></li>
+                </ul>
+            </div>
+
+            <a class="btn btn-secondary">
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: isConditional"> Conditional&nbsp;&nbsp;&nbsp;
+                </label>
+            </a>
+        </div>
+        <input type="text" data-bind="visible: isConditional, value: conditional">
+    </div>
+    </script>
+
+
+    <script id="text" type="text/html">
+    <legend>
+        <input type="text" data-bind="value: form_name" placeholder="Text Form Name"/>
+        <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
+        <span data-bind="template: { name: 'field-options', data: $data}"></span>
+    </legend>
+
+    <form>
+        <div class="control-group">
+            <input type="text" placeholder="Field Text" class="span4" data-bind="value: text"/>
+            <select class="span2" data-bind="options: bindings, value: binding"></select>
+        </div>
+        <div class="control-group">
+            <input type="text" placeholder="Placeholder" class="span4" data-bind="value: placeholder"/>
+        </div>
+        <div class="control-group">
+            <input type="text" placeholder="Extra Information" class="span4" data-bind="value: info"/>
+        </div>
+
+        <div data-bind="template: { name: 'validation', data: $data }"></div>
+    </form>
+    </script>
+
+
+    <script id="checkbox" type="text/html">
+    <legend>
+        <input type="text" data-bind="value: form_name" placeholder="Checkbox Form Name"/>
+        <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
+        <span data-bind="template: { name: 'field-options', data: $data}"></span>
+    </legend>
+
+    <form>
+        <div class="control-group">
+            <input type="text" placeholder="Field Text" class="span4" data-bind="value: text"/>
+        </div>
+        <div class="control-group">
+            <input type="text" placeholder="Extra Information" class="span4" data-bind="value: info"/>
+        </div>
+
+        <div data-bind="template: { name: 'validation', data: $data }"></div>
+    </form>
+    </script>
+
+
+    <script id="multiple" type="text/html">
+    <legend>
+        <input type="text" data-bind="value: form_name" placeholder="Checkbox Form Name"/>
+        <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
+        <span data-bind="template: { name: 'field-options', data: $data}"></span>
+    </legend>
+
+    <form>
+        <div class="control-group">
+            <input type="text" placeholder="Field Text" class="span4" data-bind="value: text"/>
+            <label>
+                <input type="checkbox" data-bind="checked: multiple"> Multiple
+            </label>
+        </div>
+        <div class="control-group">
+            <input type="text" placeholder="Placeholder" class="span4" data-bind="value: placeholder"/>
+        </div>
+        <div class="control-group">
+            <input type="text" placeholder="Extra Information" class="span4" data-bind="value: info"/>
+        </div>
+
+        <div class="control-group">
+            <div class="btn-group">
+                <a class="btn btn-mini btn-inverse" data-bind="click: add_option">
+                    <i class="icon-plus icon-white"></i>
+                    Add Option
+                </a>
+                <a class="btn btn-mini btn-secondary" data-bind="click: remove_option">
+                    <i class="icon-trash"></i>
+                    Remove Option
+                </a>
+            </div>
+        </div>
+
+        <!-- ko foreach: options -->
+        <div class="control-group">
+            <input type="text" placeholder="Value" class="span4" data-bind="value: value"/>
+        </div>
+        <!-- /ko -->
+
+        <div data-bind="template: { name: 'validation', data: $data }"></div>
+    </form>
+    </script>
+
+
+    <script id="validation" type="text/html">
+    <div class="control-group">
+        <div class="btn-group">
+            <a class="btn btn-mini btn-success" data-bind="click: add_validation">
+                <i class="icon-plus icon-white"></i>
+                Add Validation
+            </a>
+            <a class="btn btn-mini btn-info" data-bind="click: remove_validation">
+                <i class="icon-trash icon-white"></i>
+                Remove Validation
+            </a>
+        </div>
+    </div>
+
+    <!-- ko foreach: validations -->
+    <div class="control-group">
+        <select class="span2" data-bind="options: bindings, optionsText: 'name', value: binding"></select>
+        <input type="text" placeholder="Value" class="span2" data-bind="value: value, visible: !binding().lacksValue"/>
+    </div>
+    <!-- /ko -->
+    </script>
+
+
+    <script id="field-options" type="text/html">
+    <span class="btn-group" data-bind="visible: group">
+        <a class="btn btn-inverse btn-mini" data-bind="click: move_up"><i class="icon-arrow-up icon-white"></i> Move Up</a>
+        <a class="btn btn-danger btn-mini" data-bind="click: remove"><i class="icon-trash icon-white"></i> Remove</a>
+        <a class="btn btn-mini" data-bind="click: move_down"><i class="icon-arrow-down"></i> Move Down</a>
+    </span>
+    </script>
+
+    <script type="text/javascript" src="app/libs/jquery.js"></script>
+    <script type="text/javascript" src="app/libs/bootstrap.js"></script>
+    <script type="text/javascript" src="app/libs/knockout.js"></script>
+
+    <script type="text/javascript" src="app/bin/models.js"></script>
+    <script type="text/javascript" src="app/bin/submodels.js"></script>
+    <script type="text/javascript" src="app/bin/controller.js"></script>
+</body>
+</html>
