@@ -15,6 +15,7 @@ class Validation
     }]
 
     constructor: (data) ->
+        data = $.extend {}, data
         if data.binding
             for bind in @bindings
                 if bind.name is data.binding.name

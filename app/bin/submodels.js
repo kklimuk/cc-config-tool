@@ -23,6 +23,7 @@
     function Validation(data) {
       var bind, _i, _len, _ref;
 
+      data = $.extend({}, data);
       if (data.binding) {
         _ref = this.bindings;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
