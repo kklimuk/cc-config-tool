@@ -12,7 +12,7 @@
         binding: "lt"
       }, {
         name: "Equal To",
-        binding: "eq"
+        binding: "equal"
       }, {
         name: "Required",
         binding: "required",
@@ -20,15 +20,32 @@
       }
     ];
 
-    function Validation(binding, value) {
-      this.binding = ko.observable(binding);
-      this.value = ko.observable(value);
+    function Validation(data) {
+      var bind, _i, _len, _ref;
+
+      if (data.binding) {
+        _ref = this.bindings;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          bind = _ref[_i];
+          if (bind.name === data.binding.name) {
+            this.binding = ko.observable(bind);
+          }
+        }
+      } else {
+        this.binding = ko.observable(data.binding);
+      }
+      this.field = ko.observable(data.field);
+      this.value = ko.observable(data.value);
+      this.optional = ko.observable(data.optional || false);
+      this.isNumeric = ko.observable(isNaN(data.value) === false ? true : false);
     }
 
     Validation.prototype.toJSON = function() {
       return {
         binding: this.binding(),
-        value: this.value()
+        value: this.isNumeric() ? +this.value() : this.value(),
+        field: this.field(),
+        optional: this.optional()
       };
     };
 
@@ -38,11 +55,15 @@
 
   Option = (function() {
     function Option(option) {
-      this.value = ko.observable(option);
+      this.value = ko.observable(option.value);
+      this.text = ko.observable(option.text);
     }
 
     Option.prototype.toJSON = function() {
-      return this.value();
+      return {
+        text: this.text(),
+        value: this.value()
+      };
     };
 
     return Option;

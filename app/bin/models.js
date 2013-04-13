@@ -23,7 +23,7 @@
       this.validations = ko.observableArray([]);
       if (this.data.attr.validations) {
         this.data.attr.validations.forEach(function(validation) {
-          return _this.validations.push(new App.Validation(validation.binding, validation.value));
+          return _this.validations.push(new App.Validation(validation));
         });
       }
     }
@@ -77,8 +77,7 @@
       var _this = this;
 
       Group.__super__.constructor.call(this, data, group);
-      this.isConditional = ko.observable(this.data.attr.conditional ? true : false);
-      this.conditional = ko.observable(this.data.attr.conditional);
+      this.isConditional = ko.observable(this.validations().length > 0 ? true : false);
       this.fields = ko.observableArray([]);
       if (this.data.attr.fields) {
         this.data.attr.fields.forEach(function(field) {
@@ -100,7 +99,7 @@
         db_name: this.db_name(),
         type: this.type,
         attr: {
-          conditional: this.conditional(),
+          validations: this.isConditional() ? this.validations() : void 0,
           fields: this.fields()
         }
       };

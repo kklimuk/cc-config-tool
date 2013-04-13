@@ -72,8 +72,9 @@
                 </label>
             </a>
         </div>
-        <input type="text" data-bind="visible: isConditional, value: conditional">
     </div>
+
+    <div data-bind="visible: isConditional, template: { name: 'validation', data: $data }"></div>
     </script>
 
 
@@ -125,7 +126,6 @@
     <legend>
         <input type="text" data-bind="value: form_name" placeholder="Checkbox Form Name"/>
         <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
-        <span data-bind="template: { name: 'field-options', data: $data}"></span>
     </legend>
 
     <form>
@@ -157,7 +157,8 @@
 
         <!-- ko foreach: options -->
         <div class="control-group">
-            <input type="text" placeholder="Value" class="span4" data-bind="value: value"/>
+            <input type="text" placeholder="Text" class="span4" data-bind="value: text"/>
+            <input type="text" placeholder="Value" class="span2" data-bind="value: value"/>
         </div>
         <!-- /ko -->
 
@@ -182,8 +183,19 @@
 
     <!-- ko foreach: validations -->
     <div class="control-group">
+        <input type="text" placeholder="Field" class="span2" data-bind="value: field, visible: $parent.type === 'group'"/>
         <select class="span2" data-bind="options: bindings, optionsText: 'name', value: binding"></select>
         <input type="text" placeholder="Value" class="span2" data-bind="value: value, visible: !binding().lacksValue"/>
+        <a class="btn btn-secondary pull-left" style="margin-right: 5px;" data-bind="visible: $parent.type === 'group'">
+            <label class="checkbox">
+                <input type="checkbox" data-bind="checked: optional"> One of options
+            </label>
+        </a>
+        <a class="btn btn-secondary pull-left" style="margin-right: 5px;" data-bind="visible: !binding().lacksValue">
+            <label class="checkbox">
+                <input type="checkbox" data-bind="checked: isNumeric"> Numeric
+            </label>
+        </a>
     </div>
     <!-- /ko -->
     </script>

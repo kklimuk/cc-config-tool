@@ -8,7 +8,7 @@ class Field
 
         if @data.attr.validations
             @data.attr.validations.forEach (validation) =>
-                @validations.push new App.Validation(validation.binding, validation.value)
+                @validations.push new App.Validation(validation)
 
     remove: =>
         @group.fields.remove this if @group
@@ -38,8 +38,7 @@ class Group extends Field
     constructor: (data, group) ->
         super(data, group)
 
-        @isConditional = ko.observable if @data.attr.conditional then true else false
-        @conditional = ko.observable @data.attr.conditional
+        @isConditional = ko.observable if @validations().length > 0 then true else false
         @fields = ko.observableArray []
 
         if @data.attr.fields
@@ -56,7 +55,7 @@ class Group extends Field
         db_name: @db_name()
         type: @type
         attr:
-            conditional: @conditional()
+            validations: if @isConditional() then @validations()
             fields: @fields()
 
 
