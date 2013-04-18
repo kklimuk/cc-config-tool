@@ -209,14 +209,25 @@
     <!-- ko foreach: validations -->
     <div class="control-group">
         <input type="text" placeholder="Field" class="span2" data-bind="value: field, visible: $parent.type === 'group'"/>
+
         <select class="span2" data-bind="options: bindings, optionsText: 'name', value: binding"></select>
-        <input type="text" placeholder="Value" class="span2" data-bind="value: value, visible: !binding().lacksValue"/>
+
+        <a class="btn btn-primary pull-left" style="margin-right: 5px;" data-bind="visible: isDate(), click: set_today">
+            <i class="icon-calendar icon-white"></i>
+            <span data-bind="text: value() === '--today--' ? 'Unset Today' : 'Set as Today'">Set as Today</span>
+        </a>
+
+        <input type="text" placeholder="Value" class="span2"
+            data-bind="value: value, visible: !binding().lacksValue && value() !== '--today--',
+                attr: { type: isDate() ? 'date' : 'text' }"/>
+
         <a class="btn btn-secondary pull-left" style="margin-right: 5px;" data-bind="visible: $parent.type === 'group'">
             <label class="checkbox">
                 <input type="checkbox" data-bind="checked: optional"> One of options
             </label>
         </a>
-        <a class="btn btn-secondary pull-left" style="margin-right: 5px;" data-bind="visible: !binding().lacksValue">
+
+        <a class="btn btn-secondary pull-left" style="margin-right: 5px;" data-bind="visible: !binding().lacksValue && !isDate()">
             <label class="checkbox">
                 <input type="checkbox" data-bind="checked: isNumeric"> Numeric
             </label>

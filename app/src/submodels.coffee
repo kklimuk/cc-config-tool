@@ -12,6 +12,14 @@ class Validation
         name: "Required"
         binding: "required"
         lacksValue: true
+    }, {
+        name: "Latest Date"
+        binding: "maxDate"
+        isDate: true
+    }, {
+        name: "Earliest Date"
+        binding: "minDate"
+        isDate: true
     }]
 
     constructor: (data) ->
@@ -26,10 +34,17 @@ class Validation
         @value = ko.observable data.value
         @optional = ko.observable data.optional or false
         @isNumeric = ko.observable if isNaN(data.value) is false then true else false
+        @isDate = ko.computed () =>
+            return if @binding() then @binding().isDate else false
+
+    set_today: =>
+        if @value() is "--today--"
+            @value ""
+        else @value "--today--"
 
     toJSON: ->
         binding: @binding()
-        value: if @isNumeric() then +@value() else @value()
+        value: if @isNumeric() then +@value() else (if @isDate() and @value() isnt "--today--" then new Date(@value()) else @value())
         field: @field()
         optional: @optional()
 
