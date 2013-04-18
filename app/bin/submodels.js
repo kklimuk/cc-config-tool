@@ -56,8 +56,9 @@
 
   Option = (function() {
     function Option(option) {
-      this.value = ko.observable(option.value);
-      this.text = ko.observable(option.text);
+      option = $.extend({}, option);
+      this.value = ko.observable(option.value || "");
+      this.text = ko.observable(option.text || "");
     }
 
     Option.prototype.toJSON = function() {

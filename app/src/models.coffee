@@ -138,8 +138,26 @@ class Text extends Field
             validations: @validations()
 
 
+class Description extends Field
+    type: "description"
+
+    constructor: (data, group) ->
+        super(data, group)
+
+        @info = ko.observable @data.attr.info
+
+    toJSON: =>
+        form_name: @form_name()
+        db_name: @db_name()
+        type: @type
+        attr:
+            info: @info()
+            validations: @validations()
+
+
 window.App =
     group: Group
     text: Text
     multiple: Multiple
     checkbox: Checkbox
+    description: Description

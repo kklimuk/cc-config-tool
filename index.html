@@ -32,21 +32,28 @@
     <legend>
         <input type="text" data-bind="value: form_name" placeholder="Group Form Name"/>
         <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
-        <span class="btn-group" data-bind="template: { name: 'field-options', data: $data}"></span>
+        <span class="btn-group" data-bind="template: { name: 'field-options', data: $data }"></span>
     </legend>
 
     <div class="fields" data-bind="foreach: fields">
         <!-- ko if: type === "group" -->
             <fieldset data-bind="template: {name: 'group', data: $data}"></fieldset>
         <!-- /ko -->
+
         <!-- ko if: type === "multiple" -->
             <fieldset data-bind="template: {name: 'multiple', data: $data}"></fieldset>
         <!-- /ko -->
+
         <!-- ko if: type === "text" -->
             <fieldset data-bind="template: {name: 'text', data: $data}"></fieldset>
         <!-- /ko -->
+
         <!-- ko if: type === "checkbox" -->
             <fieldset data-bind="template: {name: 'checkbox', data: $data}"></fieldset>
+        <!-- /ko -->
+
+        <!-- ko if: type === "description" -->
+            <fieldset data-bind="template: {name: 'description', data: $data}"></fieldset>
         <!-- /ko -->
     </div>
 
@@ -61,6 +68,7 @@
                     <li><a data-bind="click: add_field.bind($data, 'text')">Text</a></li>
                     <li><a data-bind="click: add_field.bind($data, 'multiple')">Multiple</a></li>
                     <li><a data-bind="click: add_field.bind($data, 'checkbox')">Checkbox</a></li>
+                    <li><a data-bind="click: add_field.bind($data, 'description')">Description</a></li>
                     <li class="divider"></li>
                     <li><a data-bind="click: add_field.bind($data, 'group')">Group</a></li>
                 </ul>
@@ -122,10 +130,27 @@
     </script>
 
 
+    <script id="description" type="text/html">
+    <legend>
+        <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
+        <span data-bind="template: { name: 'field-options', data: $data}"></span>
+    </legend>
+
+    <form>
+        <div class="control-group">
+            <textarea placeholder="Information for the user" class="span4" data-bind="value: info" rows="4"></textarea>
+        </div>
+
+        <div data-bind="template: { name: 'validation', data: $data }"></div>
+    </form>
+    </script>
+
+
     <script id="multiple" type="text/html">
     <legend>
-        <input type="text" data-bind="value: form_name" placeholder="Checkbox Form Name"/>
+        <input type="text" data-bind="value: form_name" placeholder="Multiple Choice"/>
         <input type="text" data-bind="value: db_name" placeholder="Database Name"/>
+        <span data-bind="template: { name: 'field-options', data: $data}"></span>
     </legend>
 
     <form>

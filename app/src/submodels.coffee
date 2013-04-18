@@ -36,8 +36,9 @@ class Validation
 
 class Option
     constructor: (option) ->
-        @value = ko.observable option.value
-        @text = ko.observable option.text
+        option = $.extend {}, option
+        @value = ko.observable option.value or ""
+        @text = ko.observable option.text or ""
 
     toJSON: ->
         text: @text()
